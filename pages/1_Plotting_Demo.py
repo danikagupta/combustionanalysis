@@ -19,38 +19,35 @@ import numpy as np
 import streamlit as st
 from streamlit.hello.utils import show_code
 
-
-def plotting_demo():
-    progress_bar = st.sidebar.progress(0)
-    status_text = st.sidebar.empty()
-    last_rows = np.random.randn(1, 1)
-    chart = st.line_chart(last_rows)
-
-    for i in range(1, 101):
-        new_rows = last_rows[-1, :] + np.random.randn(5, 1).cumsum(axis=0)
-        status_text.text("%i%% Complete" % i)
-        chart.add_rows(new_rows)
-        progress_bar.progress(i)
-        last_rows = new_rows
-        time.sleep(0.05)
-
-    progress_bar.empty()
-
-    # Streamlit widgets automatically run the script from top to bottom. Since
-    # this button is not connected to any other logic, it just causes a plain
-    # rerun.
-    st.button("Re-run")
-
-
-st.set_page_config(page_title="Plotting Demo", page_icon="📈")
-st.markdown("# Plotting Demo")
-st.sidebar.header("Plotting Demo")
-st.write(
-    """This demo illustrates a combination of plotting and animation with
-Streamlit. We're generating a bunch of random numbers in a loop for around
-5 seconds. Enjoy!"""
-)
-
-plotting_demo()
-
-show_code(plotting_demo)
+st.session_state.hco1=st.text_input("Hydrocarbon 1 (grams)",value=5.326)
+st.session_state.co2=st.text_input("CO2 output from 1 (grams)",value=7.552)
+st.session_state.hco2=st.text_input("Hydrocarbon 2 (grams)",value=5.326)
+st.session_state.h2o=st.text_input("H2O output from 2 (grams)",value=4.638)
+if st.button("Compute"):
+    st.write("Computing the heat of combustion")
+    hco1=float(st.session_state.hco1)
+    co2=float(st.session_state.co2)
+    hco2=float(st.session_state.hco2)
+    h2o=float(st.session_state.h2o)
+    st.write(f"Inputs: HCO1 {hco1} CO2 {co2} HCO2 {hco2} H2O {h2o}")
+    co2_moles=co2/44.01
+    h2o_moles=h2o/18.02
+    st.write(f"CO2 moles {co2_moles} H2O moles {h2o_moles}")
+    c_moles=co2_moles
+    h_moles=h2o_moles*2
+    st.write(f"C moles {c_moles} H moles {h_moles}")
+    c_grams=c_moles*12.01
+    h_grams=h_moles*1.008
+    st.write(f"C grams {c_grams} H grams {h_grams}")
+    c_pct=100*c_grams/hco1
+    h_pct=100*h_grams/hco2
+    o_pct=100-(c_pct+h_pct)
+    st.write(f"By weight C % {c_pct} H % {h_pct} O % {o_pct}")
+    c_atoms=c_pct/12.01
+    h_atoms=h_pct/1.008
+    o_atoms=o_pct/16.00
+    st.write(f"By atoms C {c_atoms} H {h_atoms} O {o_atoms}")
+    #
+    #
+    #
+    st.write("TO-DO: More to do....")
